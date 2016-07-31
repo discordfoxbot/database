@@ -1,0 +1,13 @@
+{
+  "name": "discordbot-database",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "ioredis": "^2.2.0",
+    "mysql": "^2.11.1",
+    "path": "^0.12.7",
+    "sequelize": "^3.23.6",
+    "shortid": "^2.2.6",
+    "storyboard": "^2.0.2"
+  }
+}
