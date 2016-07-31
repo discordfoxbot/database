@@ -4,6 +4,7 @@ var storyboard = require('storyboard');
 var EventEmitter = require('events');
 var shortid = require('shortid');
 var path = require('path');
+var Cron = require('cron').CronJob;
 var moment = require('moment');
 
 class DB extends EventEmitter {
