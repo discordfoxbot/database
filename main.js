@@ -8,8 +8,8 @@ class DB extends EventEmitter {
     constructor(config) {
         super();
         var that = this;
-        config.sequelize.logging = (toLog)=>{
-            that.emit('sqllog',toLog);
+        config.sequelize.options.logging = (toLog)=> {
+            that.emit('sqllog', toLog);
         };
         this.config = config;
         this.sequelize = new Sequelize(config.sequelize);
@@ -80,30 +80,34 @@ class DB extends EventEmitter {
 
         this.sid = shortid.generate();
         this.sub.subscribe(config.pubsub_prefix + 'events');
-        this.sub.on('message',(channel,msg)=>{
-            if(channel===config.pubsub_prefix + 'events'){
+        this.sub.on('message', (channel, msg)=> {
+            if (channel === config.pubsub_prefix + 'events') {
                 try {
                     var data = JSON.parse(message);
                     if (data.sid !== that.sid) {
                         that.emit(data.type, data.data);
                     }
                 } catch (e) {
-                    that.emit('pubsub_error',{msg:'Error handling message',err:{error: e, msg: message}});
+                    that.emit('pubsub_error', {msg: 'Error handling message', err: {error: e, msg: message}});
                 }
-            }else that.emit('message',channel,msg);
+            } else that.emit('message', channel, msg);
         });
     }
 
-    publish(channel,message){
-        return this.redis.publish(this.config.pubsub_prefix+channel,message);
+    publish(channel, message) {
+        return this.redis.publish(this.config.pubsub_prefix + channel, message);
     }
 
-    subscribe(channel){
-        return this.sub.subscribe(this.config.pubsub_prefix+channel);
+    subscribe(channel) {
+        return this.sub.subscribe(this.config.pubsub_prefix + channel);
     }
 
-    sendEvent(event,data){
-        this.redis.publish(this.config.pubsub_prefix + 'events', JSON.stringify({type: event, data: data, sid: this.sid}));
+    sendEvent(event, data) {
+        this.redis.publish(this.config.pubsub_prefix + 'events', JSON.stringify({
+            type: event,
+            data: data,
+            sid: this.sid
+        }));
     }
 }
 
