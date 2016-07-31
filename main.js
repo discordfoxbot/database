@@ -13,8 +13,8 @@ class DB extends EventEmitter {
             that.emit('sqllog', toLog);
         };
         this.config = config;
-        this.sequelize = new Sequelize(config.sequelize);
-        this.messageDB = new Sequelize(config.sequelize);
+        this.sequelize = new Sequelize(config.sequelize.database,config.sequelize.username,config.sequelize.password,config.sequelize.options);
+        this.messageDB = new Sequelize(config.sequelize.database,config.sequelize.username,config.sequelize.password,config.sequelize.options);
         this.sub = new Redis(config.redis);
         this.redis = new Redis(config.redis);
         this.models = {
