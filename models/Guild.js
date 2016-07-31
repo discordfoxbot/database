@@ -5,7 +5,7 @@ module.exports = function (sequelize, Sequelize) {
         region: {type: Sequelize.STRING, allowNull: false},
         icon: {type: Sequelize.STRING, allowNull: true},
         avability: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true},
-        language: {type: Sequelize.STRING(5), defaultValue: require('../../config').languages.default},
+        language: {type: Sequelize.STRING(5), defaultValue: 'en'},
         mod_log: {type: Sequelize.STRING(32), defaultValue: null, allowNull: true},
         automod: {type: Sequelize.BOOLEAN, defaultValue: false},
         mute_role: {type: Sequelize.STRING(32), defaultValue: null, allowNull: true},
