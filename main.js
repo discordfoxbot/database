@@ -4,6 +4,7 @@ var storyboard = require('storyboard');
 var EventEmitter = require('events');
 var shortid = require('shortid');
 var path = require('path');
+var moment = require('moment');
 
 class DB extends EventEmitter {
     constructor(config) {
@@ -93,6 +94,15 @@ class DB extends EventEmitter {
                 }
             } else that.emit('message', channel, msg);
         });
+
+        this.crons ={};
+        if(config.useCrons){
+            this.crons.msg = new Cron('0 0 0,6,12,18 * * *', function () {
+                db.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
+                    that.emit('sqllog','Deleted ' + msgs + ' messages from the DB')
+                });
+            }, null, true);
+        }
     }
 
     publish(channel, message) {

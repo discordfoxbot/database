@@ -7,7 +7,8 @@ module.exports = function (sequelize, Sequelize) {
         status: {type: Sequelize.ENUM('online', 'offline', 'idle'), allowNull: false, defaultValue: 'online'},
         avatar: {type: Sequelize.STRING, allowNull: true},
         custom_role: {type: Sequelize.INTEGER.UNSIGNED, allowNull: false, defaultValue: 0},
-        language: {type: Sequelize.STRING(5), defaultValue: 'en'}
+        language: {type: Sequelize.STRING(5), defaultValue: 'en'},
+        in_guild: {type: Sequelize.BOOLEAN, defaultValue: true}
     }, {
         underscored: true,
         tableName: 'users'

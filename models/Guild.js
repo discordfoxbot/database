@@ -12,7 +12,8 @@ module.exports = function (sequelize, Sequelize) {
         customtext_enabled: {type: Sequelize.BOOLEAN, defaultValue: false},
         customtext_prefix: {type: Sequelize.STRING(4), allowNull: false, defaultValue: '.'},
         shard_id: {type: Sequelize.INTEGER.UNSIGNED},
-        permission: {type: Sequelize.TEXT, allowNull: true}
+        permission: {type: Sequelize.TEXT, allowNull: true},
+        online: {type: Sequelize.BOOLEAN, defaultValue: true}
     }, {
         underscored: true,
         tableName: 'guilds'

@@ -3,7 +3,8 @@ module.exports = function (sequelize, Sequelize) {
         cid: {type: Sequelize.STRING(32), unique: true, allowNull: false, primaryKey: true},
         name: {type: Sequelize.STRING(191), allowNull: false},
         description: {type: Sequelize.STRING(2000), defaultValue: null, allowNull: true},
-        type: {type: Sequelize.ENUM('voice', 'text', 'dm'), defaultValue: 'text', allowNull: false}
+        type: {type: Sequelize.ENUM('voice', 'text', 'dm'), defaultValue: 'text', allowNull: false},
+        online: {type: Sequelize.BOOLEAN, defaultValue: true}
     }, {
         underscored: true,
         tableName: 'channels'
