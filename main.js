@@ -3,6 +3,7 @@ var Redis = require('ioredis');
 var storyboard = require('storyboard');
 var EventEmitter = require('events');
 var shortid = require('shortid');
+var path = require('path');
 
 class DB extends EventEmitter {
     constructor(config) {
