@@ -81,7 +81,7 @@ class DB extends EventEmitter {
 
         this.sid = shortid.generate();
         this.sub.subscribe(config.pubsub_prefix + 'events');
-        this.sub.on('message', (channel, msg)=> {
+        this.sub.on('message', (channel, message)=> {
             if (channel === config.pubsub_prefix + 'events') {
                 try {
                     var data = JSON.parse(message);
