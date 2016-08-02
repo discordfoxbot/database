@@ -15,8 +15,8 @@ class DB extends EventEmitter {
             that.emit('sqllog', toLog);
         };
         this.config = config;
-        this.sequelize = new Sequelize(config.sequelize.database,config.sequelize.username,config.sequelize.password,config.sequelize.options);
-        this.messageDB = new Sequelize(config.sequelize.database,config.sequelize.username,config.sequelize.password,config.sequelize.options);
+        this.sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
+        this.messageDB = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
         this.sub = new Redis(config.redis);
         this.redis = new Redis(config.redis);
         this.models = {
@@ -33,7 +33,8 @@ class DB extends EventEmitter {
             ProxerWatcher: this.sequelize.import(path.join(__dirname, 'models', 'ProxerWatcher')),
             Channel: this.sequelize.import(path.join(__dirname, 'models', 'Channel')),
             ChatLog: this.sequelize.import(path.join(__dirname, 'models', 'ChatLog')),
-            ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage'))
+            ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage')),
+            Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -96,11 +97,11 @@ class DB extends EventEmitter {
             } else that.emit('message', channel, msg);
         });
 
-        this.crons ={};
-        if(config.useCrons){
+        this.crons = {};
+        if (config.useCrons) {
             this.crons.msg = new Cron('0 0 0,6,12,18 * * *', function () {
                 db.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
-                    that.emit('sqllog','Deleted ' + msgs + ' messages from the DB')
+                    that.emit('sqllog', 'Deleted ' + msgs + ' messages from the DB')
                 });
             }, null, true);
         }
