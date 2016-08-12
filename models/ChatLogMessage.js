@@ -5,7 +5,7 @@ module.exports = function (sequelize, Sequelize) {
         create_content: {type: Sequelize.STRING(2000), allowNull: false},
         edited: {type: Sequelize.BOOLEAN, defaultValue: false},
         deleted: {type: Sequelize.BOOLEAN, defaultValue: false},
-        timestamp: {type: Sequelize.INTEGER, allowNull: false, defaultValue: 0}
+        timestamp: {type: Sequelize.BIGINT, allowNull: false, defaultValue: 0}
     }, {
         underscored: true,
         tableName: 'chatlogmessages'
