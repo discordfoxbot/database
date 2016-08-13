@@ -100,7 +100,7 @@ class DB extends EventEmitter {
         this.crons = {};
         if (config.useCrons) {
             this.crons.msg = new Cron('0 0 0,6,12,18 * * *', function () {
-                db.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
+                that.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
                     that.emit('sqllog', 'Deleted ' + msgs + ' messages from the DB')
                 });
             }, null, true);
