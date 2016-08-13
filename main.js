@@ -23,6 +23,7 @@ class DB extends EventEmitter {
             Guild: this.sequelize.import(path.join(__dirname, 'models', 'Guild')),
             User: this.sequelize.import(path.join(__dirname, 'models', 'User')),
             GuildRole: this.sequelize.import(path.join(__dirname, 'models', 'GuildRole')),
+            GuildFeature: this.sequelize.import(path.join(__dirname, 'models', 'GuildFeature')),
             Prefix: this.sequelize.import(path.join(__dirname, 'models', 'Prefix')),
             TwitchChannel: this.sequelize.import(path.join(__dirname, 'models', 'TwitchChannel')),
             TwitchWatcher: this.sequelize.import(path.join(__dirname, 'models', 'TwitchWatcher')),
@@ -43,6 +44,9 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.ProxerWatcher);
         this.models.Guild.hasMany(this.models.TwitchWatcher);
         this.models.Guild.hasMany(this.models.Channel);
+        this.models.Guild.has(this.models.GuildFeature);
+
+        this.models.GuildFeature.belongsTo(this.models.Guild);
 
         this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
         this.models.User.hasMany(this.models.GuildRole);
