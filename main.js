@@ -44,7 +44,7 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.ProxerWatcher);
         this.models.Guild.hasMany(this.models.TwitchWatcher);
         this.models.Guild.hasMany(this.models.Channel);
-        this.models.Guild.has(this.models.GuildFeature);
+        this.models.Guild.hasMany(this.models.GuildFeature);
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
