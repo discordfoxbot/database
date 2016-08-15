@@ -35,7 +35,9 @@ class DB extends EventEmitter {
             Channel: this.sequelize.import(path.join(__dirname, 'models', 'Channel')),
             ChatLog: this.sequelize.import(path.join(__dirname, 'models', 'ChatLog')),
             ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage')),
-            Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture'))
+            Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture')),
+            ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
+            ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -45,6 +47,7 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.TwitchWatcher);
         this.models.Guild.hasMany(this.models.Channel);
         this.models.Guild.hasMany(this.models.GuildFeature);
+        this.models.Guild.hasOne(this.models.ChatFilter);
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
@@ -82,6 +85,11 @@ class DB extends EventEmitter {
 
         this.models.Channel.belongsTo(this.models.Guild);
         this.models.Channel.hasMany(this.models.ChatLog);
+
+        this.models.ChatFilter.belongsTo(this.models.Guild);
+        this.models.ChatFilter.hasMany(this.models.ChatFilterWord);
+
+        this.models.ChatFilterWord.belongsTo(this.models.ChatFilter);
 
         this.sequelize.sync();
         this.messageDB.sync();
