@@ -8,6 +8,7 @@ module.exports = function (sequelize, Sequelize) {
         avatar: {type: Sequelize.STRING, allowNull: true},
         custom_role: {type: Sequelize.INTEGER.UNSIGNED, allowNull: false, defaultValue: 0},
         language: {type: Sequelize.STRING(5), defaultValue: 'en'},
+        recieve_broadcasts: {type: Sequelize.BOOLEAN, defaultValue: true},
         in_guild: {type: Sequelize.BOOLEAN, defaultValue: true}
     }, {
         underscored: true,
