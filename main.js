@@ -48,11 +48,13 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.Channel);
         this.models.Guild.hasMany(this.models.GuildFeature);
         this.models.Guild.hasOne(this.models.ChatFilter);
+        this.models.Guild.belongsToMany(this.models.User,{through:'GuildMember'});
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
         this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
         this.models.User.hasMany(this.models.GuildRole);
+        this.models.User.belongsToMany(this.models.Guild,{through:'GuildMember'});
 
         this.models.GuildRole.belongsTo(this.models.Guild);
         this.models.GuildRole.belongsTo(this.models.User);
