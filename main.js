@@ -37,7 +37,8 @@ class DB extends EventEmitter {
             ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage')),
             Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture')),
             ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
-            ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord'))
+            ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord')),
+            StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -48,13 +49,13 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.Channel);
         this.models.Guild.hasMany(this.models.GuildFeature);
         this.models.Guild.hasOne(this.models.ChatFilter);
-        this.models.Guild.belongsToMany(this.models.User,{through:'GuildMember'});
+        this.models.Guild.belongsToMany(this.models.User, {through: 'GuildMember'});
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
         this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
         this.models.User.hasMany(this.models.GuildRole);
-        this.models.User.belongsToMany(this.models.Guild,{through:'GuildMember'});
+        this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
 
         this.models.GuildRole.belongsTo(this.models.Guild);
         this.models.GuildRole.belongsTo(this.models.User);
