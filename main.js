@@ -104,7 +104,7 @@ class DB extends EventEmitter {
                 try {
                     var data = JSON.parse(message);
                     if (data.sid !== that.sid) {
-                        that.emit(data.type, data.data);
+                        that.emit(data.type, data.data||{});
                     }
                 } catch (e) {
                     that.emit('pubsub_error', {msg: 'Error handling message', err: {error: e, msg: message}});
@@ -133,13 +133,13 @@ class DB extends EventEmitter {
     sendEvent(event, data) {
         this.redis.publish(this.config.pubsub_prefix + 'events', JSON.stringify({
             type: event,
-            data: data,
+            data: data||{},
             sid: this.sid
         }));
     }
 
     sendSelf(event,data){
-        this.emit(event,data);
+        this.emit(event,data||{});
     }
 }
 
