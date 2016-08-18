@@ -137,6 +137,10 @@ class DB extends EventEmitter {
             sid: this.sid
         }));
     }
+
+    sendSelf(event,data){
+        this.emit(event,data);
+    }
 }
 
 module.exports = DB;
