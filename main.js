@@ -38,7 +38,8 @@ class DB extends EventEmitter {
             Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture')),
             ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
             ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord')),
-            StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage'))
+            StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage')),
+            GithubFeed: this.sequelize.import(path.join(__dirname, 'models', 'GithubFeed'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -88,11 +89,14 @@ class DB extends EventEmitter {
 
         this.models.Channel.belongsTo(this.models.Guild);
         this.models.Channel.hasMany(this.models.ChatLog);
+        this.models.Channel.hasMany(this.models.GithubFeed);
 
         this.models.ChatFilter.belongsTo(this.models.Guild);
         this.models.ChatFilter.hasMany(this.models.ChatFilterWord);
 
         this.models.ChatFilterWord.belongsTo(this.models.ChatFilter);
+
+        this.models.GithubFeed.belongsTo(this.models.Channel);
 
         this.sequelize.sync();
         this.messageDB.sync();
@@ -104,7 +108,7 @@ class DB extends EventEmitter {
                 try {
                     var data = JSON.parse(message);
                     if (data.sid !== that.sid) {
-                        that.emit(data.type, data.data||{});
+                        that.emit(data.type, data.data || {});
                     }
                 } catch (e) {
                     that.emit('pubsub_error', {msg: 'Error handling message', err: {error: e, msg: message}});
@@ -133,13 +137,13 @@ class DB extends EventEmitter {
     sendEvent(event, data) {
         this.redis.publish(this.config.pubsub_prefix + 'events', JSON.stringify({
             type: event,
-            data: data||{},
+            data: data || {},
             sid: this.sid
         }));
     }
 
-    sendSelf(event,data){
-        this.emit(event,data||{});
+    sendSelf(event, data) {
+        this.emit(event, data || {});
     }
 }
 
