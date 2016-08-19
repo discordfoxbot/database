@@ -5,7 +5,7 @@ module.exports = function (sequelize, Sequelize) {
         repository_name:{type:Sequelize.STRING(191)},
         repository_id:{type:Sequelize.STRING(32)},
         repository_owner:{type:Sequelize.STRING(191)},
-        repository_owner_id:{type:Sequelize.STING(32)}
+        repository_owner_id:{type:Sequelize.STRING(32)}
     }, {
         underscored: true,
         tableName: 'githubfeeds'
