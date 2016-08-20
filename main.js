@@ -89,7 +89,7 @@ class DB extends EventEmitter {
 
         this.models.Channel.belongsTo(this.models.Guild);
         this.models.Channel.hasMany(this.models.ChatLog);
-        this.models.Channel.hasMany(this.models.GithubFeed);
+        this.models.Channel.hasOne(this.models.GithubFeed);
 
         this.models.ChatFilter.belongsTo(this.models.Guild);
         this.models.ChatFilter.hasMany(this.models.ChatFilterWord);
