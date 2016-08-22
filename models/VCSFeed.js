@@ -5,6 +5,6 @@ module.exports = function (sequelize, Sequelize) {
         last_gl_event: {type: Sequelize.STRING(191)}
     }, {
         underscored: true,
-        tableName: 'githubfeeds'
+        tableName: 'vcsfeeds'
     })
 };
