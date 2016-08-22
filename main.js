@@ -39,7 +39,7 @@ class DB extends EventEmitter {
             ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
             ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord')),
             StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage')),
-            GithubFeed: this.sequelize.import(path.join(__dirname, 'models', 'GithubFeed'))
+            VCSFeed: this.sequelize.import(path.join(__dirname, 'models', 'VCSFeed'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -89,14 +89,14 @@ class DB extends EventEmitter {
 
         this.models.Channel.belongsTo(this.models.Guild);
         this.models.Channel.hasMany(this.models.ChatLog);
-        this.models.Channel.hasOne(this.models.GithubFeed);
+        this.models.Channel.hasOne(this.models.VCSFeed);
 
         this.models.ChatFilter.belongsTo(this.models.Guild);
         this.models.ChatFilter.hasMany(this.models.ChatFilterWord);
 
         this.models.ChatFilterWord.belongsTo(this.models.ChatFilter);
 
-        this.models.GithubFeed.belongsTo(this.models.Channel);
+        this.models.VCSFeed.belongsTo(this.models.Channel);
 
         this.sequelize.sync();
         this.messageDB.sync();
