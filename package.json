@@ -1,6 +1,6 @@
 {
   "name": "db",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "main.js",
   "dependencies": {
     "cron": "^1.1.0",

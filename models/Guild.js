@@ -9,6 +9,7 @@ module.exports = function (sequelize, Sequelize) {
         mod_log: {type: Sequelize.STRING(32), defaultValue: null, allowNull: true},
         automod: {type: Sequelize.BOOLEAN, defaultValue: false},
         mute_role: {type: Sequelize.STRING(32), defaultValue: null, allowNull: true},
+        logging: {type: Sequelize.BOOLEAN, defaultValue: true, allowNull: false},
         customtext_enabled: {type: Sequelize.BOOLEAN, defaultValue: false},
         customtext_prefix: {type: Sequelize.STRING(4), allowNull: false, defaultValue: '.'},
         shard_id: {type: Sequelize.INTEGER.UNSIGNED},
