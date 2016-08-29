@@ -52,7 +52,7 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.GuildFeature);
         this.models.Guild.hasOne(this.models.ChatFilter);
         this.models.Guild.belongsToMany(this.models.User, {through: 'GuildMember'});
-        this.models.Guild.belongsToMany(this.models.Token, {through: 'Tokens'});
+        this.models.Guild.belongsToMany(this.models.Token, {through: 'ApiTokens'});
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
@@ -101,7 +101,7 @@ class DB extends EventEmitter {
 
         this.models.VCSFeed.belongsTo(this.models.Channel);
 
-        this.models.Token.belongsToMany(this.models.Guild, {through: 'Tokens'});
+        this.models.Token.belongsToMany(this.models.Guild, {through: 'ApiTokens'});
         this.models.Token.belongsTo(this.models.User);
 
         this.sequelize.sync();
