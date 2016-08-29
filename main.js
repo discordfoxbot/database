@@ -39,7 +39,8 @@ class DB extends EventEmitter {
             ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
             ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord')),
             StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage')),
-            VCSFeed: this.sequelize.import(path.join(__dirname, 'models', 'VCSFeed'))
+            VCSFeed: this.sequelize.import(path.join(__dirname, 'models', 'VCSFeed')),
+            Token: this.sequelize.import(path.join(__dirname, 'models', 'Token'))
         };
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
@@ -51,12 +52,14 @@ class DB extends EventEmitter {
         this.models.Guild.hasMany(this.models.GuildFeature);
         this.models.Guild.hasOne(this.models.ChatFilter);
         this.models.Guild.belongsToMany(this.models.User, {through: 'GuildMember'});
+        this.models.Guild.belongsToMany(this.models.Token, {through: 'Tokens'});
 
         this.models.GuildFeature.belongsTo(this.models.Guild);
 
         this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
         this.models.User.hasMany(this.models.GuildRole);
         this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
+        this.models.User.hasMany(this.models.Token);
 
         this.models.GuildRole.belongsTo(this.models.Guild);
         this.models.GuildRole.belongsTo(this.models.User);
@@ -97,6 +100,8 @@ class DB extends EventEmitter {
         this.models.ChatFilterWord.belongsTo(this.models.ChatFilter);
 
         this.models.VCSFeed.belongsTo(this.models.Channel);
+
+        this.models.Token.belongsToMany(this.models.Guild, {through: 'Tokens'});
 
         this.sequelize.sync();
         this.messageDB.sync();
