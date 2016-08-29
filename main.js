@@ -102,6 +102,7 @@ class DB extends EventEmitter {
         this.models.VCSFeed.belongsTo(this.models.Channel);
 
         this.models.Token.belongsToMany(this.models.Guild, {through: 'Tokens'});
+        this.models.Token.belongsTo(this.models.User);
 
         this.sequelize.sync();
         this.messageDB.sync();
