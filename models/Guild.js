@@ -14,7 +14,12 @@ module.exports = function (sequelize, Sequelize) {
         customtext_prefix: {type: Sequelize.STRING(4), allowNull: false, defaultValue: '.'},
         shard_id: {type: Sequelize.INTEGER.UNSIGNED},
         permission: {type: Sequelize.TEXT, allowNull: true},
-        online: {type: Sequelize.BOOLEAN, defaultValue: true}
+        online: {type: Sequelize.BOOLEAN, defaultValue: true},
+        initialized: {type: Sequelize.BOOLEAN, defaultValue: false},
+        regular_role: {type: Sequelize.STRING(32), allowNull: true},
+        vip_role: {type: Sequelize.STRING(32), allowNull: true},
+        moderator_role: {type: Sequelize.STRING(32), allowNull: true},
+        manager_role: {type: Sequelize.STRING(32), allowNull: true},
     }, {
         underscored: true,
         tableName: 'guilds'
