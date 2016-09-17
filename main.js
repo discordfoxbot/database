@@ -60,11 +60,11 @@ class DB extends EventEmitter {
         this.models.User.hasMany(this.models.GuildRole);
         this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
         this.models.User.hasMany(this.models.Token);
+        this.models.User.belongsTo(this.models.Character, {as: 'Waifu'});
+        this.models.User.belongsTo(this.models.Character, {as: 'Husbando'});
 
         this.models.GuildRole.belongsTo(this.models.Guild);
         this.models.GuildRole.belongsTo(this.models.User);
-        this.models.User.belongsTo(this.models.Character, {as: 'Waifu'});
-        this.models.User.belongsTo(this.models.Character, {as: 'Husbando'});
 
         this.models.Prefix.belongsToMany(this.models.Guild, {through: 'GuildPrefixes'});
 
