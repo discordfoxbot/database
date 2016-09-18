@@ -4,7 +4,8 @@ module.exports = function (sequelize, Sequelize) {
         name: {type: Sequelize.STRING(191), allowNull: false},
         description: {type: Sequelize.STRING(2000), defaultValue: null, allowNull: true},
         type: {type: Sequelize.ENUM('voice', 'text', 'dm'), defaultValue: 'text', allowNull: false},
-        online: {type: Sequelize.BOOLEAN, defaultValue: true}
+        online: {type: Sequelize.BOOLEAN, defaultValue: true},
+        modlog: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false}
     }, {
         underscored: true,
         tableName: 'channels'
