@@ -4,6 +4,7 @@ module.exports = function (sequelize, Sequelize) {
         token: {type: Sequelize.STRING(255), unique: true},
         type: {type: Sequelize.ENUM('user', 'system', 'application'), defaultValue: 'user'},
         level: {type: Sequelize.INTEGER.UNSIGNED, defaultValue: 0},
+        query_limit: {type: Sequelize.INTEGER.UNSIGNED, defaultValue: 100, allowNull: false},
         expires: {type: Sequelize.DATE, defaultValue: null, allowNull: true}
     }, {
         underscored: true,
