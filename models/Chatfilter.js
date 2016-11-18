@@ -1,13 +1,13 @@
-module.exports = function (sequelize, Sequelize) {
-    return sequelize.define('GuildFeature', {
+module.exports = (sequelize, Sequelize) => {
+    return sequelize.define('Chatfilter', {
             id: {type: Sequelize.STRING(14), allowNull: false, primaryKey: true, unique: true},
             name: {type: Sequelize.STRING(32), allowNull: false},
             enabled: {type: Sequelize.BOOLEAN, defaultValue: true, allowNull: false},
-            meta: {type: Sequelize.STRING(100), allowNull: true}
+            config: {type: Sequelize.TEXT, allowNull: true}
         },
         {
             underscored: true,
-            tableName: 'guildfeatures'
+            tableName: 'guildchatfilters'
         }
     )
 };

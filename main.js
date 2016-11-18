@@ -1,18 +1,19 @@
-var Sequelize = require('sequelize');
-var Redis = require('ioredis');
-var storyboard = require('storyboard');
-var EventEmitter = require('events');
-var shortid = require('shortid');
-var path = require('path');
-var Cron = require('cron').CronJob;
-var moment = require('moment');
+let Sequelize = require('sequelize'),
+    Redis = require('ioredis'),
+    storyboard = require('storyboard'),
+    EventEmitter = require('events'),
+    shortid = require('shortid'),
+    path = require('path'),
+    Cron = require('cron').CronJob,
+    moment = require('moment');
 
 class DB extends EventEmitter {
+    /** @namespace config.useCrons */
+    /** @namespace this.config.pubsub_prefix */
     constructor(config) {
         super();
-        var that = this;
-        config.sequelize.options.logging = (toLog)=> {
-            that.emit('sqllog', toLog);
+        config.sequelize.options.logging = (toLog) => {
+            this.emit('sqllog', toLog);
         };
         this.config = config;
         this.sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
@@ -21,9 +22,9 @@ class DB extends EventEmitter {
         this.redis = new Redis(config.redis);
         this.models = {
             Guild: this.sequelize.import(path.join(__dirname, 'models', 'Guild')),
+            Chatfilter: this.sequelize.import(`${__dirname}/models/Chatfilter`),
             User: this.sequelize.import(path.join(__dirname, 'models', 'User')),
             GuildRole: this.sequelize.import(path.join(__dirname, 'models', 'GuildRole')),
-            GuildFeature: this.sequelize.import(path.join(__dirname, 'models', 'GuildFeature')),
             Prefix: this.sequelize.import(path.join(__dirname, 'models', 'Prefix')),
             TwitchChannel: this.sequelize.import(path.join(__dirname, 'models', 'TwitchChannel')),
             TwitchWatcher: this.sequelize.import(path.join(__dirname, 'models', 'TwitchWatcher')),
@@ -36,8 +37,6 @@ class DB extends EventEmitter {
             ChatLog: this.sequelize.import(path.join(__dirname, 'models', 'ChatLog')),
             ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage')),
             Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture')),
-            ChatFilter: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilter')),
-            ChatFilterWord: this.sequelize.import(path.join(__dirname, 'models', 'ChatFilterWord')),
             StatusMessage: this.sequelize.import(path.join(__dirname, 'models', 'StatusMessage')),
             VCSFeed: this.sequelize.import(path.join(__dirname, 'models', 'VCSFeed')),
             Token: this.sequelize.import(path.join(__dirname, 'models', 'Token'))
@@ -45,19 +44,20 @@ class DB extends EventEmitter {
 
         this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
         this.models.Guild.hasMany(this.models.GuildRole);
+        //noinspection JSCheckFunctionSignatures
         this.models.Guild.belongsToMany(this.models.Prefix, {through: 'GuildPrefixes'});
         this.models.Guild.hasMany(this.models.ProxerWatcher);
         this.models.Guild.hasMany(this.models.TwitchWatcher);
         this.models.Guild.hasMany(this.models.Channel);
-        this.models.Guild.hasMany(this.models.GuildFeature);
-        this.models.Guild.hasOne(this.models.ChatFilter);
+        this.models.Guild.hasOne(this.models.Chatfilter);
+        //noinspection JSCheckFunctionSignatures
         this.models.Guild.belongsToMany(this.models.User, {through: 'GuildMember'});
+        //noinspection JSCheckFunctionSignatures
         this.models.Guild.belongsToMany(this.models.Token, {through: 'ApiTokens'});
-
-        this.models.GuildFeature.belongsTo(this.models.Guild);
 
         this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
         this.models.User.hasMany(this.models.GuildRole);
+        //noinspection JSCheckFunctionSignatures
         this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
         this.models.User.hasMany(this.models.Token);
         this.models.User.belongsTo(this.models.Character, {as: 'Waifu'});
@@ -66,6 +66,7 @@ class DB extends EventEmitter {
         this.models.GuildRole.belongsTo(this.models.Guild);
         this.models.GuildRole.belongsTo(this.models.User);
 
+        //noinspection JSCheckFunctionSignatures
         this.models.Prefix.belongsToMany(this.models.Guild, {through: 'GuildPrefixes'});
 
         this.models.TwitchWatcher.belongsTo(this.models.Guild);
@@ -82,11 +83,13 @@ class DB extends EventEmitter {
 
         this.models.CharacterPicture.belongsTo(this.models.Character);
 
+        //noinspection JSCheckFunctionSignatures
         this.models.ChatLog.belongsToMany(this.models.ChatLogMessage, {through: 'LogMessages'});
         this.models.ChatLog.belongsTo(this.models.User);
         this.models.ChatLog.belongsTo(this.models.Guild);
         this.models.ChatLog.belongsTo(this.models.Channel);
 
+        //noinspection JSCheckFunctionSignatures
         this.models.ChatLogMessage.belongsToMany(this.models.ChatLog, {through: 'LogMessages'});
         this.models.ChatLogMessage.belongsTo(this.models.User);
 
@@ -94,13 +97,11 @@ class DB extends EventEmitter {
         this.models.Channel.hasMany(this.models.ChatLog);
         this.models.Channel.hasOne(this.models.VCSFeed);
 
-        this.models.ChatFilter.belongsTo(this.models.Guild);
-        this.models.ChatFilter.hasMany(this.models.ChatFilterWord);
-
-        this.models.ChatFilterWord.belongsTo(this.models.ChatFilter);
+        this.models.Chatfilter.belongsTo(this.models.Guild);
 
         this.models.VCSFeed.belongsTo(this.models.Channel);
 
+        //noinspection JSCheckFunctionSignatures
         this.models.Token.belongsToMany(this.models.Guild, {through: 'ApiTokens'});
         this.models.Token.belongsTo(this.models.User);
 
@@ -109,24 +110,25 @@ class DB extends EventEmitter {
 
         this.sid = shortid.generate();
         this.sub.subscribe(config.pubsub_prefix + 'events');
-        this.sub.on('message', (channel, message)=> {
+        this.sub.on('message', (channel, message) => {
             if (channel === config.pubsub_prefix + 'events') {
                 try {
-                    var data = JSON.parse(message);
-                    if (data.sid !== that.sid) {
-                        that.emit(data.type, data.data || {});
+                    let data = JSON.parse(message);
+                    if (data.sid !== this.sid) {
+                        this.emit(data.type, data.data || {});
                     }
                 } catch (e) {
-                    that.emit('pubsub_error', {msg: 'Error handling message', err: {error: e, msg: message}});
+                    this.emit('pubsub_error', {msg: 'Error handling message', err: {error: e, msg: message}});
                 }
-            } else that.emit('message', channel, msg);
+            } else this.emit('message', channel, msg);
         });
 
         this.crons = {};
         if (config.useCrons) {
             this.crons.msg = new Cron('0 0 0,6,12,18 * * *', function () {
-                that.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
-                    that.emit('sqllog', 'Deleted ' + msgs + ' messages from the DB')
+                //noinspection JSUnresolvedFunction
+                this.models.Message.destroy({where: {created_at: {$lt: moment().subtract(3, 'days').toDate()}}}).then(function (msgs) {
+                    this.emit('sqllog', 'Deleted ' + msgs + ' messages from the DB')
                 });
             }, null, true);
         }
@@ -140,6 +142,7 @@ class DB extends EventEmitter {
         return this.sub.subscribe(this.config.pubsub_prefix + channel);
     }
 
+    //noinspection JSUnusedGlobalSymbols
     sendEvent(event, data) {
         this.redis.publish(this.config.pubsub_prefix + 'events', JSON.stringify({
             type: event,
@@ -148,6 +151,7 @@ class DB extends EventEmitter {
         }));
     }
 
+    //noinspection JSUnusedGlobalSymbols
     sendSelf(event, data) {
         this.emit(event, data || {});
     }
