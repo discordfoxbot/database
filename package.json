@@ -1,7 +1,9 @@
 {
-  "name": "db",
-  "version": "0.0.22",
+  "name": "kitsune-db",
+  "version": "0.0.23",
   "main": "main.js",
+  "author":"Johannes Diehl <johannes@diehl.io>",
+  "description": "Database module for kitsune. THIS IS NOT MEANT FOR PUBLIC USE!",
   "dependencies": {
     "cron": "^1.1.0",
     "ioredis": "^2.2.0",
