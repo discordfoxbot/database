@@ -1,6 +1,6 @@
 {
   "name": "kitsune-db",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "main": "main.js",
   "author":"Johannes Diehl <johannes@diehl.io>",
   "description": "Database module for kitsune. THIS IS NOT MEANT FOR PUBLIC USE!",
