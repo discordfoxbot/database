@@ -35,6 +35,7 @@ class DB extends EventEmitter {
                 Message: this.messageDB.import(path.join(__dirname, 'models', 'Message')),
                 ProxerAnime: this.sequelize.import(path.join(__dirname, 'models', 'ProxerAnime')),
                 ProxerWatcher: this.sequelize.import(path.join(__dirname, 'models', 'ProxerWatcher')),
+                Picture: this.sequelize.import(path.join(__dirname, 'models', 'Picture')),
                 Channel: this.sequelize.import(path.join(__dirname, 'models', 'Channel')),
                 ChatLog: this.sequelize.import(path.join(__dirname, 'models', 'ChatLog')),
                 ChatLogMessage: this.sequelize.import(path.join(__dirname, 'models', 'ChatLogMessage')),
