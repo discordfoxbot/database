@@ -59,8 +59,6 @@ class DB extends EventEmitter {
             //noinspection JSCheckFunctionSignatures
             this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
             this.models.User.hasMany(this.models.Token);
-            this.models.User.belongsTo(this.models.Character, {as: 'Waifu'});
-            this.models.User.belongsTo(this.models.Character, {as: 'Husbando'});
 
             //noinspection JSCheckFunctionSignatures
             this.models.Prefix.belongsToMany(this.models.Guild, {through: 'GuildPrefixes'});
