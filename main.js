@@ -28,7 +28,6 @@ class DB extends EventEmitter {
                 Guild: this.sequelize.import(path.join(__dirname, 'models', 'Guild')),
                 Chatfilter: this.sequelize.import(`${__dirname}/models/Chatfilter`),
                 User: this.sequelize.import(path.join(__dirname, 'models', 'User')),
-                GuildRole: this.sequelize.import(path.join(__dirname, 'models', 'GuildRole')),
                 Prefix: this.sequelize.import(path.join(__dirname, 'models', 'Prefix')),
                 TwitchChannel: this.sequelize.import(path.join(__dirname, 'models', 'TwitchChannel')),
                 TwitchWatcher: this.sequelize.import(path.join(__dirname, 'models', 'TwitchWatcher')),
@@ -45,7 +44,6 @@ class DB extends EventEmitter {
             };
 
             this.models.Guild.belongsTo(this.models.User, {as: 'Owner'});
-            this.models.Guild.hasMany(this.models.GuildRole);
             //noinspection JSCheckFunctionSignatures
             this.models.Guild.belongsToMany(this.models.Prefix, {through: 'GuildPrefixes'});
             this.models.Guild.hasMany(this.models.ProxerWatcher);
@@ -58,15 +56,11 @@ class DB extends EventEmitter {
             this.models.Guild.belongsToMany(this.models.Token, {through: 'ApiTokens'});
 
             this.models.User.hasMany(this.models.Guild, {as: 'OwnedGuilds'});
-            this.models.User.hasMany(this.models.GuildRole);
             //noinspection JSCheckFunctionSignatures
             this.models.User.belongsToMany(this.models.Guild, {through: 'GuildMember'});
             this.models.User.hasMany(this.models.Token);
             this.models.User.belongsTo(this.models.Character, {as: 'Waifu'});
             this.models.User.belongsTo(this.models.Character, {as: 'Husbando'});
-
-            this.models.GuildRole.belongsTo(this.models.Guild);
-            this.models.GuildRole.belongsTo(this.models.User);
 
             //noinspection JSCheckFunctionSignatures
             this.models.Prefix.belongsToMany(this.models.Guild, {through: 'GuildPrefixes'});
@@ -80,10 +74,6 @@ class DB extends EventEmitter {
             this.models.ProxerWatcher.belongsTo(this.models.Guild);
 
             this.models.ProxerAnime.hasMany(this.models.ProxerWatcher);
-
-            this.models.Character.hasMany(this.models.CharacterPicture);
-
-            this.models.CharacterPicture.belongsTo(this.models.Character);
 
             //noinspection JSCheckFunctionSignatures
             this.models.ChatLog.belongsToMany(this.models.ChatLogMessage, {through: 'LogMessages'});

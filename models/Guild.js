@@ -1,6 +1,6 @@
 module.exports = function (sequelize, Sequelize) {
     return sequelize.define('Guild', {
-        gid: {type: Sequelize.STRING(32), unique: true, allowNull: false, primaryKey: true},
+        id: {type: Sequelize.STRING(32), unique: true, allowNull: false, primaryKey: true, field: 'gid'},
         name: {type: Sequelize.TEXT, allowNull: false},
         region: {type: Sequelize.STRING, allowNull: false},
         icon: {type: Sequelize.STRING, allowNull: true},
@@ -20,11 +20,11 @@ module.exports = function (sequelize, Sequelize) {
 
 
         //roles stuff
-        initialized: {type: Sequelize.BOOLEAN, defaultValue: false},
         regular_role: {type: Sequelize.STRING(32), allowNull: true},
         vip_role: {type: Sequelize.STRING(32), allowNull: true},
         moderator_role: {type: Sequelize.STRING(32), allowNull: true},
         manager_role: {type: Sequelize.STRING(32), allowNull: true},
+        administrator_role: {type: Sequelize.STRING(32), allowNull: true},
 
         mute_role: {type: Sequelize.STRING(32), defaultValue: null, allowNull: true}
     }, {
